@@ -8,7 +8,7 @@ export class PostService {
   constructor(private prisma: PrismaService) {}
 
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    return this.prisma.post.create({ data: createPostDto });
   }
 
   findAll() {
@@ -16,11 +16,14 @@ export class PostService {
   }
 
   findOne(id: number) {
-    return this.prisma.post.findMany({ where: { id: id } });
+    return this.prisma.post.findUnique({ where: { id: id } });
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    return this.prisma.post.update({
+      where: { id: id },
+      data: updatePostDto,
+    });
   }
 
   remove(id: number) {

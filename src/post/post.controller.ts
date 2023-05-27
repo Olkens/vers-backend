@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -26,8 +27,14 @@ export class PostController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const post = await this.postService.findOne(+id);
+
+    if (!post) {
+      throw new NotFoundException(`Post with id ${id} does not exist!`);
+    }
+
+    return;
   }
 
   @Patch(':id')
